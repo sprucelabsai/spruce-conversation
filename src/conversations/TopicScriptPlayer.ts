@@ -7,7 +7,7 @@ import {
 	SendMessageHandler,
 	ScriptPlayerSendMessage,
 	ScriptLine,
-} from './../types/conversation.types'
+} from '../types/conversation.types'
 
 type MessageTarget = SpruceSchemas.Spruce.v2020_07_22.MessageTarget
 type Message = SpruceSchemas.Spruce.v2020_07_22.Message
@@ -18,7 +18,7 @@ function getRandomInt(min: number, max: number) {
 	return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-export class ConversationTopicScriptPlayer {
+export class TopicScriptPlayer {
 	private script: Script
 	private sendMessageHandler: SendMessageHandler
 	private target: MessageTarget

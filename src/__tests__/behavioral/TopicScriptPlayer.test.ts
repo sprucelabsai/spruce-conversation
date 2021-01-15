@@ -1,6 +1,6 @@
 import AbstractSpruceTest, { test, assert } from '@sprucelabs/test'
 import { errorAssertUtil } from '@sprucelabs/test-utils'
-import { ConversationTopicScriptPlayer } from '../../conversations/ConversationTopicScriptPlayer'
+import { TopicScriptPlayer } from '../../conversations/TopicScriptPlayer'
 import {
 	Script,
 	ScriptPlayerOptions,
@@ -8,11 +8,11 @@ import {
 	Message,
 } from '../../types/conversation.types'
 
-export default class ConversationTopicScriptPlayerTest extends AbstractSpruceTest {
+export default class TopicScriptPlayerTest extends AbstractSpruceTest {
 	@test()
 	protected static async throwsWhenRequiredOptionsNotSent() {
 		//@ts-ignore
-		const err = assert.doesThrow(() => new ConversationTopicScriptPlayer())
+		const err = assert.doesThrow(() => new TopicScriptPlayer())
 		errorAssertUtil.assertError(err, 'MISSING_PARAMETERS', {
 			parameters: ['script', 'sendMessageHandler', 'target.personId'],
 		})
@@ -143,6 +143,7 @@ export default class ConversationTopicScriptPlayerTest extends AbstractSpruceTes
 	@test('Passes confirm when sent "yeah!!!"', 'yeah!!!', true)
 	@test('Passes confirm when sent "oh heck ya"', 'oh heck ya', true)
 	@test('Passes confirm when sent "oh heck yeah"', 'oh heck yeah', true)
+	@test('Passes confirm when sent "👍"', '👍', true)
 	@test('Fails confirm when sent "negative"', 'negative', false)
 	@test('Fails confirm when sent "nope"', 'nope', false)
 	@test('Fails confirm when sent "nope!!"', 'nope!!', false)
@@ -151,6 +152,7 @@ export default class ConversationTopicScriptPlayerTest extends AbstractSpruceTes
 	@test('Fails confirm when sent "no thank you"', 'no thank you', false)
 	@test('Fails confirm when sent "nah"', 'nah', false)
 	@test('Fails confirm when sent "No thanks!!!"', 'No thanks!!!', false)
+	@test('Fails confirm when sent "👎"', '👎', true)
 	protected static async scriptCanAskToConfirm(
 		confirmBody: string,
 		expectedConfirmResults: boolean
@@ -204,7 +206,7 @@ export default class ConversationTopicScriptPlayerTest extends AbstractSpruceTes
 	private static Player(
 		options: Partial<ScriptPlayerOptions> & { script: Script }
 	) {
-		return new ConversationTopicScriptPlayer({
+		return new TopicScriptPlayer({
 			target: options.target ?? { personId: '12345' },
 			script: options.script,
 			sendMessageHandler: options.sendMessageHandler ?? async function () {},
@@ -212,7 +214,7 @@ export default class ConversationTopicScriptPlayerTest extends AbstractSpruceTes
 	}
 
 	private static async sendMessage(
-		player: ConversationTopicScriptPlayer,
+		player: TopicScriptPlayer,
 		message: Partial<SendMessage>
 	) {
 		await player.handleMessage(
