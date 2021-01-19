@@ -8,7 +8,9 @@ type LoadedTopicDefinition = TopicDefinition & {
 }
 
 export default class TopicLoader {
-	public static async Loader(sourceDir: string) {
+	private constructor() {}
+
+	public static async loadTopics(sourceDir: string) {
 		const pattern = pathUtil.join(
 			sourceDir,
 			'conversations',
@@ -16,7 +18,7 @@ export default class TopicLoader {
 		)
 
 		const matches = await globby(pattern)
-		const topics: TopicDefinition[] = []
+		const topics: LoadedTopicDefinition[] = []
 
 		if (matches.length > 0) {
 			for (const match of matches) {
