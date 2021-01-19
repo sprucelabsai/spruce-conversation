@@ -2,7 +2,7 @@ import AbstractSpruceTest, { test, assert } from '@sprucelabs/test'
 import { errorAssertUtil } from '@sprucelabs/test-utils'
 import TopicLoader from '../../conversations/TopicLoader'
 
-export default class LoadingTopicsFromDiskTest extends AbstractSpruceTest {
+export default class TopicLoaderTest extends AbstractSpruceTest {
 	@test()
 	protected static async canCreateTopicLoader() {
 		const loader = new TopicLoader()
@@ -12,7 +12,7 @@ export default class LoadingTopicsFromDiskTest extends AbstractSpruceTest {
 	@test()
 	protected static async loadsNoTopicsWithBadDir() {
 		const source = this.resolvePath('doesNotExist')
-		const topics = await TopicLoader.Loader(source)
+		const topics = await TopicLoader.loadTopics(source)
 
 		assert.isLength(topics, 0)
 	}
@@ -21,7 +21,9 @@ export default class LoadingTopicsFromDiskTest extends AbstractSpruceTest {
 	protected static async throwsWhenLoadingEmpty() {
 		const source = this.resolveTestPath('bad-empty')
 
-		const err = await assert.doesThrowAsync(() => TopicLoader.Loader(source))
+		const err = await assert.doesThrowAsync(() =>
+			TopicLoader.loadTopics(source)
+		)
 
 		errorAssertUtil.assertError(err, 'INVALID_TOPIC', {
 			topicScript: 'bookAppointment.topic',
@@ -31,7 +33,9 @@ export default class LoadingTopicsFromDiskTest extends AbstractSpruceTest {
 	@test()
 	protected static async throwsWhenMissingParameters() {
 		const source = this.resolveTestPath('bad-missing-params')
-		const err = await assert.doesThrowAsync(() => TopicLoader.Loader(source))
+		const err = await assert.doesThrowAsync(() =>
+			TopicLoader.loadTopics(source)
+		)
 
 		errorAssertUtil.assertError(err, 'INVALID_TOPIC', {
 			topicScript: 'bookAppointment.topic',
@@ -47,13 +51,13 @@ export default class LoadingTopicsFromDiskTest extends AbstractSpruceTest {
 
 	@test()
 	protected static async canLoadTopics() {
-		const scripts = await TopicLoader.Loader(this.resolveTestPath('good'))
+		const scripts = await TopicLoader.loadTopics(this.resolveTestPath('good'))
 		assert.isLength(scripts, 2)
 	}
 
 	@test()
 	protected static async loadedTopicsSetKey() {
-		const scripts = await TopicLoader.Loader(this.resolveTestPath('good'))
+		const scripts = await TopicLoader.loadTopics(this.resolveTestPath('good'))
 		assert.doesInclude(scripts, { key: 'bookAppointment' })
 		assert.doesInclude(scripts, { key: 'cancelAppointment' })
 	}

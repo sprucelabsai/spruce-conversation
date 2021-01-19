@@ -8,7 +8,9 @@ type LoadedTopicDefinition = TopicDefinition & {
 }
 
 export default class TopicLoader {
-	public static async Loader(sourceDir: string) {
+	private constructor() {}
+
+	public static async loadTopics(sourceDir: string) {
 		const pattern = pathUtil.join(
 			sourceDir,
 			'conversations',

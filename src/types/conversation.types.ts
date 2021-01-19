@@ -1,7 +1,11 @@
 import { buildSchema, SchemaValues } from '@sprucelabs/schema'
 import { SpruceSchemas } from '@sprucelabs/spruce-core-schemas'
 import { EventTarget } from '@sprucelabs/spruce-event-utils'
-import { GraphicsInterface } from '@sprucelabs/spruce-skill-utils'
+import {
+	GraphicsInterface,
+	HealthCheckItem,
+	HealthCheckResults,
+} from '@sprucelabs/spruce-skill-utils'
 
 export type Message = SpruceSchemas.Spruce.v2020_07_22.Message
 export type SendMessage = SpruceSchemas.Spruce.v2020_07_22.SendMessage
@@ -57,4 +61,12 @@ export interface Topic {
 
 export interface TopicDefinition extends Omit<Topic, 'key'> {
 	script: Script
+}
+
+export interface ConversationHealthCheckItem extends HealthCheckItem {
+	topics: string[]
+}
+
+export interface ConversationHealthCheckResults extends HealthCheckResults {
+	conversation: ConversationHealthCheckItem
 }
