@@ -44,7 +44,7 @@
 		"@sprucelabs/schema": "^19.0.1",
 		"@sprucelabs/spruce-core-schemas": "^22.1.10",
 		"@sprucelabs/spruce-event-utils": "^9.0.11",
-		"@sprucelabs/spruce-skill-utils": "^15.1.11",
+		"@sprucelabs/spruce-skill-utils": "^15.2.0",
 		"globby": "^11.0.2",
 		"node-nlp": "^4.19.1"
 	},
