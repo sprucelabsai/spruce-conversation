@@ -37,4 +37,25 @@ export declare namespace SpruceErrors.SpruceConversation {
 
 
 
+export declare namespace SpruceErrors.SpruceConversation {
+
+	
+	export interface ConversationPluginError {
+		
+	}
+
+	export interface ConversationPluginErrorSchema extends SpruceSchema.Schema {
+		id: 'conversationPluginError',
+		namespace: 'SpruceConversation',
+		name: 'Conversation plugin error',
+		    fields: {
+		    }
+	}
+
+	export type ConversationPluginErrorEntity = SchemaEntity<SpruceErrors.SpruceConversation.ConversationPluginErrorSchema>
+
+}
+
+
+
 

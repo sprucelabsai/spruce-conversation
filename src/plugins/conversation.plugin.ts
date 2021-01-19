@@ -1,5 +1,6 @@
 import { Skill, SkillFeature } from '@sprucelabs/spruce-skill-utils'
 import TopicLoader from '../conversations/TopicLoader'
+import SpruceError from '../errors/SpruceError'
 import { ConversationHealthCheckItem } from '../types/conversation.types'
 
 export class ConversationFeature implements SkillFeature {
@@ -14,16 +15,21 @@ export class ConversationFeature implements SkillFeature {
 	}
 	public async checkHealth(): Promise<ConversationHealthCheckItem> {
 		try {
-			await TopicLoader.loadTopics(this.activeDir)
+			const topics = await TopicLoader.loadTopics(this.activeDir)
 			return {
 				status: 'passed',
-				topics: [],
+				topics: topics.map((t) => t.key),
 			}
 		} catch (err) {
 			return {
 				status: 'failed',
 				topics: [],
-				errors: [],
+				errors: [
+					new SpruceError({
+						code: 'CONVERSATION_PLUGIN_ERROR',
+						originalError: err,
+					}),
+				],
 			}
 		}
 	}

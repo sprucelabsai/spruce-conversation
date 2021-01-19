@@ -15,6 +15,11 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 					', '
 				)}`
 				break
+
+			case 'CONVERSATION_PLUGIN_ERROR':
+				message = 'A Conversation plugin error just happened!'
+				break
+
 			default:
 				message = super.friendlyMessage()
 		}

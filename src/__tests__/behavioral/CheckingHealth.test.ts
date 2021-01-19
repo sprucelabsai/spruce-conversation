@@ -1,9 +1,10 @@
-import Skill from '@sprucelabs/spruce-skill-utils'
 import AbstractSpruceTest, { test, assert } from '@sprucelabs/test'
+import { errorAssertUtil } from '@sprucelabs/test-utils'
 import plugin from '../../plugins/conversation.plugin'
+import AbstractConversationTest from '../../tests/AbstractConversationTest'
 import { ConversationHealthCheckResults } from '../../types/conversation.types'
 
-export default class BootingThePluginTest extends AbstractSpruceTest {
+export default class CheckingHealthTest extends AbstractConversationTest {
 	@test()
 	protected static async pluginReturnsInstance() {
 		assert.isTrue(plugin instanceof Function)
@@ -14,17 +15,6 @@ export default class BootingThePluginTest extends AbstractSpruceTest {
 		const skill = this.Skill()
 		const features = skill.getFeatures()
 		assert.isLength(features, 1)
-	}
-
-	private static Skill(options?: { activeDir?: string }) {
-		const skill = new Skill({
-			rootDir: this.cwd,
-			activeDir: this.cwd,
-			hashSpruceDir: this.cwd,
-			...options,
-		})
-		plugin(skill)
-		return skill
 	}
 
 	@test()
@@ -53,5 +43,27 @@ export default class BootingThePluginTest extends AbstractSpruceTest {
 		})
 
 		assert.isEqual(healthCheck.conversation.status, 'failed')
+		errorAssertUtil.assertError(
+			healthCheck.conversation.errors?.[0] as Error,
+			'CONVERSATION_PLUGIN_ERROR'
+		)
+
+		errorAssertUtil.assertError(
+			healthCheck.conversation.errors?.[0].originalError as Error,
+			'INVALID_TOPIC'
+		)
+	}
+
+	@test()
+	protected static async getsTopicsFromHealthCheck() {
+		const healthCheck = await this.checkHealth({
+			activeDir: this.resolvePath(__dirname, '..', 'testDirsAndFiles', 'good'),
+		})
+
+		assert.isLength(healthCheck.conversation.topics, 2)
+		assert.isEqualDeep(healthCheck.conversation.topics, [
+			'bookAppointment',
+			'cancelAppointment',
+		])
 	}
 }
