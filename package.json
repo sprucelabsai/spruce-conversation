@@ -41,13 +41,15 @@
 	"dependencies": {
 		"@nlpjs/nlu": "^4.19.0",
 		"@sprucelabs/error": "latest",
-		"@sprucelabs/schema": "^19.0.1",
-		"@sprucelabs/spruce-core-schemas": "^22.1.4",
-		"@sprucelabs/spruce-event-utils": "^9.0.8",
-		"@sprucelabs/spruce-skill-utils": "^15.1.7",
+		"@sprucelabs/schema": "latest",
+		"@sprucelabs/spruce-core-schemas": "latest",
+		"@sprucelabs/spruce-event-utils": "latest",
+		"@sprucelabs/spruce-skill-utils": "latest",
+		"globby": "^11.0.2",
 		"node-nlp": "^4.19.0"
 	},
 	"devDependencies": {
+		"ts-node": "^9.1.1",
 		"@babel/cli": "^7.12.10",
 		"@babel/core": "^7.12.10",
 		"@babel/plugin-proposal-class-properties": "^7.12.1",
@@ -55,18 +57,18 @@
 		"@babel/plugin-transform-runtime": "^7.12.10",
 		"@babel/preset-env": "^7.12.11",
 		"@babel/preset-typescript": "^7.12.7",
-		"@sprucelabs/babel-plugin-schema": "latest",
+		"@sprucelabs/babel-plugin-schema": "^4.0.1",
 		"@sprucelabs/jest-json-reporter": "latest",
 		"@sprucelabs/semantic-release": "latest",
 		"@sprucelabs/test": "latest",
-		"@sprucelabs/test-utils": "^3.0.32",
+		"@sprucelabs/test-utils": "latest",
 		"@types/node": "^14.14.21",
 		"babel-plugin-module-resolver": "^4.1.0",
 		"chokidar-cli": "^2.1.0",
 		"concurrently": "^5.3.0",
-		"conventional-changelog-sprucelabs": "^1.1.2",
+		"conventional-changelog-sprucelabs": "latest",
 		"eslint": "^7.17.0",
-		"eslint-config-spruce": "^10.9.131",
+		"eslint-config-spruce": "latest",
 		"jest": "^26.6.3",
 		"jest-circus": "^26.6.3",
 		"prettier": "^2.2.1",
@@ -80,8 +82,7 @@
 		"testPathIgnorePatterns": [
 			"<rootDir>/tmp/",
 			"<rootDir>/src/",
-			"<rootDir>/node_modules/",
-			"<rootDir>/build/__tests__/testDirsAndFiles/"
+			"<rootDir>/node_modules/"
 		],
 		"testMatch": [
 			"**/__tests__/**/*.test.js?(x)"
@@ -96,7 +97,9 @@
 			"@sprucelabs/babel-plugin-schema",
 			"@sprucelabs/jest-json-reporter",
 			"@sprucelabs/semantic-release",
-			"@sprucelabs/test"
+			"@sprucelabs/test",
+			"conventional-changelog-sprucelabs",
+			"eslint-config-spruce"
 		]
 	}
 }

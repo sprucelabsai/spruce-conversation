@@ -48,3 +48,13 @@ export const suggestedConversationTopicSchema = buildSchema({
 
 export type SuggestedConversationTopicSchema = typeof suggestedConversationTopicSchema
 export type SuggestedConversationTopic = SchemaValues<SuggestedConversationTopicSchema>
+
+export interface Topic {
+	key: string
+	label: string
+	utterances: string[]
+}
+
+export interface TopicDefinition extends Topic {
+	script: Script
+}

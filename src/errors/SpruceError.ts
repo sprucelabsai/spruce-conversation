@@ -1,26 +1,42 @@
-import AbstractSpruceError, {
-	SpruceErrorOptions,
-	ErrorOptions as IErrorOptions,
-} from '@sprucelabs/error'
+import BaseSpruceError from '@sprucelabs/error'
+import ErrorOptions from '#spruce/errors/options.types'
 
-interface FailedToLoadPluginErrorOptions extends IErrorOptions {
-	code: 'FAILED_TO_LOAD_PLUGIN'
-	file: string
-}
-
-export type ErrorOptions = FailedToLoadPluginErrorOptions | SpruceErrorOptions
-
-export default class SpruceError extends AbstractSpruceError<ErrorOptions> {
-	public friendlyMessage() {
-		let message = super.friendlyMessage()
-
-		switch (this.options.code) {
-			case 'FAILED_TO_LOAD_PLUGIN':
-				message = `Failed to load the plugin at ${this.options.file}.\n\n`
-				message += this.options.friendlyMessage
+export default class SpruceError extends BaseSpruceError<ErrorOptions> {
+	/** An easy to understand version of the errors */
+	public friendlyMessage(): string {
+		const { options } = this
+		let message
+		switch (options?.code) {
+			case 'INVALID_TOPIC':
+				message = `The conversation topic defined in ${options.topicScript} is not valid.`
 				break
+			case 'MISSING_PARAMETERS':
+				message = `Looks like you're missing the following parameters: ${options.parameters.join(
+					', '
+				)}`
+				break
+			default:
+				message = super.friendlyMessage()
 		}
 
-		return message
+		// Drop on code and friendly message
+		message = `${options.code}: ${message}`
+		const fullMessage = `${message}${
+			options.friendlyMessage && options.friendlyMessage !== message
+				? `\n\n${options.friendlyMessage}`
+				: ''
+		}`
+
+		// Handle repeating text from original message by remove it
+		return `${fullMessage}${
+			this.originalError &&
+			this.originalError.message !== fullMessage &&
+			this.originalError.message !== message
+				? `\n\nOriginal error: ${this.originalError.message.replace(
+						message,
+						''
+				  )}`
+				: ''
+		}`
 	}
 }
