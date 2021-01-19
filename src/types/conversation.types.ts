@@ -55,6 +55,6 @@ export interface Topic {
 	utterances: string[]
 }
 
-export interface TopicDefinition extends Topic {
+export interface TopicDefinition extends Omit<Topic, 'key'> {
 	script: Script
 }

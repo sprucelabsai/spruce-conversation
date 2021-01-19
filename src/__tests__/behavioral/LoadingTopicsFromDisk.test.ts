@@ -41,8 +41,21 @@ export default class LoadingTopicsFromDiskTest extends AbstractSpruceTest {
 		const original = err.options.originalError
 
 		errorAssertUtil.assertError(original, 'MISSING_PARAMETERS', {
-			parameters: ['key', 'label', 'utterances', 'script'],
+			parameters: ['label', 'utterances', 'script'],
 		})
+	}
+
+	@test()
+	protected static async canLoadTopics() {
+		const scripts = await TopicLoader.Loader(this.resolveTestPath('good'))
+		assert.isLength(scripts, 2)
+	}
+
+	@test()
+	protected static async loadedTopicsSetKey() {
+		const scripts = await TopicLoader.Loader(this.resolveTestPath('good'))
+		assert.doesInclude(scripts, { key: 'bookAppointment' })
+		assert.doesInclude(scripts, { key: 'cancelAppointment' })
 	}
 
 	private static resolveTestPath(pathAfterTestDirsAndFiles: string) {

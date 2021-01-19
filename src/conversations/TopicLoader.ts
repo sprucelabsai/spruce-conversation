@@ -1,8 +1,11 @@
-import { debug } from 'console'
 import pathUtil from 'path'
 import globby from 'globby'
 import SpruceError from '../errors/SpruceError'
 import { TopicDefinition } from '../types/conversation.types'
+
+type LoadedTopicDefinition = TopicDefinition & {
+	key: string
+}
 
 export default class TopicLoader {
 	public static async Loader(sourceDir: string) {
@@ -25,9 +28,10 @@ export default class TopicLoader {
 		return topics
 	}
 
-	private static loadTopic(match: string): TopicDefinition {
-		const imported = require(match) as { default?: TopicDefinition }
+	private static loadTopic(match: string): LoadedTopicDefinition {
+		const imported = require(match) as { default?: LoadedTopicDefinition }
 		const file = pathUtil.basename(match).replace(pathUtil.extname(match), '')
+		const key = file.split('.')[0]
 
 		if (!imported || !imported.default) {
 			throw new SpruceError({
@@ -39,9 +43,11 @@ export default class TopicLoader {
 
 		const { default: topicDefinition } = imported
 
+		topicDefinition.key = key
+
 		const missing: string[] = []
 
-		const keys = ['key', 'label', 'utterances', 'script']
+		const keys = ['label', 'utterances', 'script']
 
 		for (const key of keys) {
 			//@ts-ignore
