@@ -1,13 +1,10 @@
+//@ts-ignore
 import { containerBootstrap } from '@nlpjs/core'
+//@ts-ignore
 import { LangEn } from '@nlpjs/lang-en'
+//@ts-ignore
 import { NluManager, NluNeural } from '@nlpjs/nlu'
-import { SuggestedConversationTopic } from '../types/conversation.types'
-
-export interface Topic {
-	key: string
-	label: string
-	utterances: string[]
-}
+import { SuggestedConversationTopic, Topic } from '../types/conversation.types'
 
 type NlpProcessor = (
 	messageBody: string
