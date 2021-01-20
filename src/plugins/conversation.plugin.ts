@@ -4,18 +4,20 @@ import SpruceError from '../errors/SpruceError'
 import { ConversationHealthCheckItem } from '../types/conversation.types'
 
 export class ConversationFeature implements SkillFeature {
-	private activeDir: string
+	private skill: Skill
 
-	public constructor(activeDir: string) {
-		this.activeDir = activeDir
+	public constructor(skill: Skill) {
+		this.skill = skill
 	}
 
 	public async execute(): Promise<void> {
-		throw new Error('Method not implemented.')
+		this.assertDependencies()
 	}
 	public async checkHealth(): Promise<ConversationHealthCheckItem> {
+		this.assertDependencies()
+
 		try {
-			const topics = await TopicLoader.loadTopics(this.activeDir)
+			const topics = await TopicLoader.loadTopics(this.skill.activeDir)
 			return {
 				status: 'passed',
 				topics: topics.map((t) => t.key),
@@ -33,12 +35,23 @@ export class ConversationFeature implements SkillFeature {
 			}
 		}
 	}
+	private assertDependencies() {
+		try {
+			this.skill.getFeatureByCode('event')
+		} catch {
+			throw new SpruceError({
+				code: 'MISSING_DEPENDENCIES',
+				dependencies: ['event.plugin'],
+			})
+		}
+	}
+
 	public async isInstalled(): Promise<boolean> {
 		return true
 	}
 }
 
 export default (skill: Skill) => {
-	const feature = new ConversationFeature(skill.activeDir)
+	const feature = new ConversationFeature(skill)
 	skill.registerFeature('conversation', feature)
 }

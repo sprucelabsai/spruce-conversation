@@ -1,7 +1,9 @@
 import { test, assert } from '@sprucelabs/test'
 import { errorAssertUtil } from '@sprucelabs/test-utils'
 import plugin from '../../plugins/conversation.plugin'
-import AbstractConversationTest from '../../tests/AbstractConversationTest'
+import AbstractConversationTest, {
+	SkillFactoryOptions,
+} from '../../tests/AbstractConversationTest'
 import { ConversationHealthCheckResults } from '../../types/conversation.types'
 
 export default class CheckingHealthTest extends AbstractConversationTest {
@@ -11,10 +13,23 @@ export default class CheckingHealthTest extends AbstractConversationTest {
 	}
 
 	@test()
-	protected static registersWithSkilll() {
+	protected static registersWithSkill() {
 		const skill = this.Skill()
 		const features = skill.getFeatures()
-		assert.isLength(features, 1)
+		assert.isLength(features, 2)
+	}
+
+	@test()
+	protected static async throwsWhenExecutingIfEventPluginMissing() {
+		const health = await this.checkHealth({ plugins: [plugin] })
+
+		assert.isEqual(health.conversation.status, 'failed')
+		const err = health.conversation.errors?.[0]
+		assert.isTruthy(err)
+
+		errorAssertUtil.assertError(err, 'MISSING_DEPENDENCIES', {
+			dependencies: ['event.plugin'],
+		})
 	}
 
 	@test()
@@ -25,7 +40,7 @@ export default class CheckingHealthTest extends AbstractConversationTest {
 		assert.isEqualDeep(healthCheck.conversation.topics, [])
 	}
 
-	private static async checkHealth(options?: { activeDir?: string }) {
+	private static async checkHealth(options?: SkillFactoryOptions) {
 		const skill = this.Skill(options)
 		const healthCheck = (await skill.checkHealth()) as ConversationHealthCheckResults
 		return healthCheck

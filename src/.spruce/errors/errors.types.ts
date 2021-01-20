@@ -11,27 +11,28 @@ import * as SpruceSchema from '@sprucelabs/schema'
 export declare namespace SpruceErrors.SpruceConversation {
 
 	
-	export interface InvalidTopic {
+	export interface MissingDependencies {
 		
 			
-			'topicScript': string
+			'dependencies': string[]
 	}
 
-	export interface InvalidTopicSchema extends SpruceSchema.Schema {
-		id: 'invalidTopic',
+	export interface MissingDependenciesSchema extends SpruceSchema.Schema {
+		id: 'missingDependencies',
 		namespace: 'SpruceConversation',
-		name: 'Invalid topic',
+		name: 'Missing dependencies',
 		    fields: {
 		            /** . */
-		            'topicScript': {
+		            'dependencies': {
 		                type: 'text',
 		                isRequired: true,
+		                isArray: true,
 		                options: undefined
 		            },
 		    }
 	}
 
-	export type InvalidTopicEntity = SchemaEntity<SpruceErrors.SpruceConversation.InvalidTopicSchema>
+	export type MissingDependenciesEntity = SchemaEntity<SpruceErrors.SpruceConversation.MissingDependenciesSchema>
 
 }
 
@@ -53,6 +54,35 @@ export declare namespace SpruceErrors.SpruceConversation {
 	}
 
 	export type ConversationPluginErrorEntity = SchemaEntity<SpruceErrors.SpruceConversation.ConversationPluginErrorSchema>
+
+}
+
+
+
+export declare namespace SpruceErrors.SpruceConversation {
+
+	
+	export interface InvalidTopic {
+		
+			
+			'topicScript': string
+	}
+
+	export interface InvalidTopicSchema extends SpruceSchema.Schema {
+		id: 'invalidTopic',
+		namespace: 'SpruceConversation',
+		name: 'Invalid topic',
+		    fields: {
+		            /** . */
+		            'topicScript': {
+		                type: 'text',
+		                isRequired: true,
+		                options: undefined
+		            },
+		    }
+	}
+
+	export type InvalidTopicEntity = SchemaEntity<SpruceErrors.SpruceConversation.InvalidTopicSchema>
 
 }
 

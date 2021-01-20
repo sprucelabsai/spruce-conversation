@@ -1,14 +1,9 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test'
+import { test, assert } from '@sprucelabs/test'
 import { errorAssertUtil } from '@sprucelabs/test-utils'
 import TopicLoader from '../../conversations/TopicLoader'
+import AbstractConversationTest from '../../tests/AbstractConversationTest'
 
-export default class TopicLoaderTest extends AbstractSpruceTest {
-	@test()
-	protected static async canCreateTopicLoader() {
-		const loader = new TopicLoader()
-		assert.isTruthy(loader)
-	}
-
+export default class TopicLoaderTest extends AbstractConversationTest {
 	@test()
 	protected static async loadsNoTopicsWithBadDir() {
 		const source = this.resolvePath('doesNotExist')
@@ -60,14 +55,5 @@ export default class TopicLoaderTest extends AbstractSpruceTest {
 		const scripts = await TopicLoader.loadTopics(this.resolveTestPath('good'))
 		assert.doesInclude(scripts, { key: 'bookAppointment' })
 		assert.doesInclude(scripts, { key: 'cancelAppointment' })
-	}
-
-	private static resolveTestPath(pathAfterTestDirsAndFiles: string) {
-		return this.resolvePath(
-			__dirname,
-			'..',
-			'testDirsAndFiles',
-			pathAfterTestDirsAndFiles
-		)
 	}
 }

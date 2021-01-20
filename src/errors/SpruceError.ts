@@ -20,6 +20,10 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 				message = 'A Conversation plugin error just happened!'
 				break
 
+			case 'MISSING_DEPENDENCIES':
+				message = 'A Missing dependencies just happened!'
+				break
+
 			default:
 				message = super.friendlyMessage()
 		}
